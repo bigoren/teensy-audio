@@ -65,9 +65,26 @@ unsigned long lastPlayTime = 0;
 unsigned long quietDelay = 1000; // in ms, divide by 60000 for minutes
 
 // GPIO output to ESP32
-#define ESP32_GPIO_OUT 1
-#define FADE_IN_TIME 10000
-#define FADE_OUT_TIME 20000
+#define ESP32_QUE_IO 0
+#define ESP32_START_IO 1
+
+#define QUE_OPENING_TIME     2000   // 59 secs duration event 1
+#define QUE_OPENING_END_TIME 61000  // 76 secs duration 2
+#define QUE_GROWING_TIME     137000 // 53 secs duration 3
+#define QUE_KNIFE_TIME       190000 // 77 secs duration 4
+#define QUE_BALLS_TIME       267000 // 61 secs duration 5
+#define QUE_GET_UP_TIME      328000 // 100 secs duration 6
+#define QUE_CAVE_TIME        428000 // 54 secs duration 7
+#define QUE_MICRO_TIME       482000 // 95 secs duration 8
+#define QUE_DREAMS_TIME      577000 // 70 secs duration 9
+#define QUE_HEART_TIME       647000 // 60 secs duration 10
+#define QUE_TEMPLE_TIME      707000 // 45 secs duration 11
+#define QUE_YEARS_TIME       752000 // 37 secs duration 12
+#define QUE_MUSIC_TIME       789000 // 64 secs duration 13
+#define QUE_LOVE_TIME        853000 // 85 secs duration 14
+// #define QUE_END_TIME         938000 //  15
+#define MAX_EVENT_CNT        15
+uint8_t eventCnt = 0;
 
 // Monitoring
 unsigned long lastMonitorTime = 0;
@@ -99,7 +116,8 @@ void setup() {
     }
     Serial.println("Audio setup done.");
 
-    pinMode(ESP32_GPIO_OUT, OUTPUT);
+    pinMode(ESP32_START_IO, OUTPUT);
+    pinMode(ESP32_QUE_IO, OUTPUT);
 }
 
 void playFile(const char *filename)
@@ -131,19 +149,63 @@ void stopFile()
 }
 
 void loop() {
+  // Start IO is used to signal ESP32 audio playing just started
+  digitalWrite(ESP32_START_IO, LOW);
 
-  // When file reaches designated time, send signal to ESP32
-  if (playWav1.positionMillis()%30000 > FADE_IN_TIME && playWav1.positionMillis()%30000 < FADE_OUT_TIME) {
-    digitalWrite(ESP32_GPIO_OUT, HIGH);
-  } else {
-    digitalWrite(ESP32_GPIO_OUT, LOW);
+  // When file reaches que times, send signal to ESP32
+  if (playWav1.positionMillis() > QUE_OPENING_TIME && playWav1.positionMillis() < QUE_OPENING_END_TIME) {
+    digitalWrite(ESP32_QUE_IO, HIGH);
+    eventCnt = 1;
+  } else if (playWav1.positionMillis() > QUE_OPENING_END_TIME && playWav1.positionMillis() < QUE_GROWING_TIME) {
+    digitalWrite(ESP32_QUE_IO, LOW);
+    eventCnt = 2;
+  } else if (playWav1.positionMillis() > QUE_GROWING_TIME && playWav1.positionMillis() < QUE_KNIFE_TIME) {
+    digitalWrite(ESP32_QUE_IO, HIGH);
+    eventCnt = 3;
+  } else if (playWav1.positionMillis() > QUE_KNIFE_TIME && playWav1.positionMillis() < QUE_BALLS_TIME) {
+    digitalWrite(ESP32_QUE_IO, LOW);
+    eventCnt = 4;
+  } else if (playWav1.positionMillis() > QUE_BALLS_TIME && playWav1.positionMillis() < QUE_GET_UP_TIME) {
+    digitalWrite(ESP32_QUE_IO, HIGH);
+    eventCnt = 5;
+  } else if (playWav1.positionMillis() > QUE_GET_UP_TIME && playWav1.positionMillis() < QUE_CAVE_TIME) {
+    digitalWrite(ESP32_QUE_IO, LOW);
+    eventCnt = 6;
+  } else if (playWav1.positionMillis() > QUE_CAVE_TIME && playWav1.positionMillis() < QUE_MICRO_TIME) {
+    digitalWrite(ESP32_QUE_IO, HIGH);
+    eventCnt = 7;
+  } else if (playWav1.positionMillis() > QUE_MICRO_TIME && playWav1.positionMillis() < QUE_DREAMS_TIME) {
+    digitalWrite(ESP32_QUE_IO, LOW);
+    eventCnt = 8;
+  } else if (playWav1.positionMillis() > QUE_DREAMS_TIME && playWav1.positionMillis() < QUE_HEART_TIME) {
+    digitalWrite(ESP32_QUE_IO, HIGH);
+    eventCnt = 9;
+  } else if (playWav1.positionMillis() > QUE_HEART_TIME && playWav1.positionMillis() < QUE_TEMPLE_TIME) {
+    digitalWrite(ESP32_QUE_IO, LOW);
+    eventCnt = 10;
+  } else if (playWav1.positionMillis() > QUE_TEMPLE_TIME && playWav1.positionMillis() < QUE_YEARS_TIME) {
+    digitalWrite(ESP32_QUE_IO, HIGH);
+    eventCnt = 11;
+  } else if (playWav1.positionMillis() > QUE_YEARS_TIME && playWav1.positionMillis() < QUE_MUSIC_TIME) {
+    digitalWrite(ESP32_QUE_IO, LOW);
+    eventCnt = 12;
+  } else if (playWav1.positionMillis() > QUE_MUSIC_TIME && playWav1.positionMillis() < QUE_LOVE_TIME) {
+    digitalWrite(ESP32_QUE_IO, HIGH);
+    eventCnt = 13;
+  } else if (playWav1.positionMillis() > QUE_LOVE_TIME) {
+    digitalWrite(ESP32_QUE_IO, LOW);
+    eventCnt = 14;
   }
 
   // If no file is playing, play default audio file
   if (!playWav1.isPlaying()) {
+    digitalWrite(ESP32_START_IO, HIGH);
+    digitalWrite(ESP32_QUE_IO, LOW);
+    eventCnt = 0;
     if((millis() - lastPlayTime) > quietDelay) {
       playFile("1.wav");
       lastPlayTime = millis();
+      Serial.println("No audio for more than quietDelay. Playing default audio file.");
     }
   }
 
@@ -152,11 +214,18 @@ void loop() {
       Serial.print("Audio teensy is ");
       if (playWav1.isPlaying()) {
           Serial.print("playing audio file, current positionMillis: "); Serial.println(playWav1.positionMillis());
-          Serial.print("Fade state is: "); Serial.println(digitalRead(ESP32_GPIO_OUT));
+          Serial.print("Event count: "); Serial.println(eventCnt);
+          Serial.print("Start IO state is: "); Serial.println(digitalRead(ESP32_START_IO));
+          Serial.print("Que IO state is: "); Serial.println(digitalRead(ESP32_QUE_IO));
       } else {
           Serial.println("NO audio file playing");
       }
       lastMonitorTime = millis();
+  }
+
+  if (eventCnt >= MAX_EVENT_CNT) {
+      Serial.println("Event count reached maximum. starting over.");
+      eventCnt = 0;
   }
 
   // delay as we don't need to change things too often, can be removed
