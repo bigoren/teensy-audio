@@ -67,34 +67,34 @@ unsigned long quietDelay = 1000; // in ms, divide by 60000 for minutes
 #define ESP32_QUE_IO 0
 #define ESP32_START_IO 1
 
-#define QUE_OPENING_TIME_DARK 2000       // 28 secs duration event 1
-#define QUE_OPENING_TIME_LIGHT 20000     // 31 secs duration event 2
-#define QUE_OPENING_END_TIME_LIGHT 61000 // 57 secs duration 3
-#define QUE_OPENING_END_TIME_DARK 118000 // 19 secs duration 4
-#define QUE_GROWING_TIME_DARK 137000     // 30 secs duration 5
-#define QUE_GROWING_TIME_LIGHT 157000    // 23 secs duration 6
-#define QUE_KNIFE_TIME_LIGHT 190000      // 57 secs duration 7
-#define QUE_KNIFE_TIME_DARK 235000       // 20 secs duration 8
-#define QUE_BALLS_TIME_DARK 267000       // 20 secs duration 9
-#define QUE_BALLS_TIME_LIGHT 287000      // 41 secs duration 10
-#define QUE_GET_UP_TIME_LIGHT 322000     // 80 secs duration 11
-#define QUE_GET_UP_TIME_DARK 408000      // 20 secs duration 12
-#define QUE_CAVE_TIME_DARK 428000        // 20 secs duration 13
-#define QUE_CAVE_TIME_LIGHT 442000       // 34 secs duration 14
-#define QUE_MICRO_TIME_LIGHT 482000      // 75 secs duration 15
-#define QUE_MICRO_TIME_DARK 524000       // 20 secs duration 16
-#define QUE_DREAMS_TIME_DARK 586000      // 20 secs duration 17
-#define QUE_DREAMS_TIME_LIGHT 606000     // 50 secs duration 18
-#define QUE_HEART_TIME_LIGHT 626000      // 40 secs duration 19
-#define QUE_HEART_TIME_DARK 668000       // 20 secs duration 20
-#define QUE_TEMPLE_TIME_DARK 711000      // 20 secs duration 21
-#define QUE_TEMPLE_TIME_LIGHT 729000     // 25 secs duration 22
-#define QUE_YEARS_TIME_LIGHT 745000      // 27 secs duration 23
-#define QUE_YEARS_TIME_DARK 795000       // 10 secs duration 24
-#define QUE_MUSIC_TIME_DARK 824000       // 20 secs duration 25
-#define QUE_MUSIC_TIME_LIGHT 886000      // 44 secs duration 26
-#define QUE_LOVE_TIME_LIGHT 956000       // 65 secs duration 27
-#define QUE_LOVE_TIME_DARK 956000        // 20 secs duration 28
+#define QUE_OPENING_TIME_DARK 2000       // event 1
+#define QUE_OPENING_TIME_LIGHT 20000     // event 2
+#define QUE_OPENING_END_TIME_LIGHT 61000 // 3
+#define QUE_OPENING_END_TIME_DARK 108000 // 4
+#define QUE_GROWING_TIME_DARK 137000     // 5
+#define QUE_GROWING_TIME_LIGHT 157000    // 6
+#define QUE_KNIFE_TIME_LIGHT 190000      // 7
+#define QUE_KNIFE_TIME_DARK 235000       // 8
+#define QUE_BALLS_TIME_DARK 267000       // 9
+#define QUE_BALLS_TIME_LIGHT 322000      // 10
+#define QUE_GET_UP_TIME_LIGHT 358000     // 11
+#define QUE_GET_UP_TIME_DARK 408000      // 12
+#define QUE_CAVE_TIME_DARK 428000        // 13
+#define QUE_CAVE_TIME_LIGHT 448000       // 14
+#define QUE_MICRO_TIME_LIGHT 482000      // 15
+#define QUE_MICRO_TIME_DARK 524000       // 16
+#define QUE_DREAMS_TIME_DARK 586000      // 17
+#define QUE_DREAMS_TIME_LIGHT 625000     // 18
+#define QUE_HEART_TIME_LIGHT 626000      // 19
+#define QUE_HEART_TIME_DARK 668000       // 20
+#define QUE_TEMPLE_TIME_DARK 701000      // 21
+#define QUE_TEMPLE_TIME_LIGHT 729000     // 22
+#define QUE_YEARS_TIME_LIGHT 745000      // 23
+#define QUE_YEARS_TIME_DARK 804000       // 24
+#define QUE_MUSIC_TIME_DARK 824000       // 25
+#define QUE_MUSIC_TIME_LIGHT 886000      // 26
+#define QUE_LOVE_TIME_LIGHT 956000       // 27
+#define QUE_LOVE_TIME_DARK 956000        // 28
 
 #define MAX_EVENT_CNT 27
 uint8_t eventCnt = 0;
